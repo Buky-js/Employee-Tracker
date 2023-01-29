@@ -42,7 +42,8 @@ function appStart() {
             'Add a department',
             'Add a role',
             'Add an employee',
-            'Update an employee role'
+            'Update an employee role',
+            'Exit'
         ]
     }]).then((answers) => {
         switch (answers.action) {
@@ -65,10 +66,12 @@ function appStart() {
                 addEmployee();
                 break;
             case 'Update an employee role':
-                updateEmployee();
+                updateEmployeeRole();
                 break;
-            default:
-                connection.end();
+            case 'Exit':
+                db.end();
+                console.log("Good-Bye!");
+                break;
 
         }
     })
@@ -193,8 +196,7 @@ function addEmployee() {
                 name: employee.first_name + ' ' + employee.last_name,
                 value: employee.id
             }))
-            inquirer.prompt([
-                {
+            inquirer.prompt([{
                     name: 'firstName',
                     type: 'input',
                     message: 'What is the new employee\'s first name?'
@@ -217,19 +219,64 @@ function addEmployee() {
                     choices: employees
                 }
             ]).then((response) => {
-                db.query(`INSERT INTO employee SET ?`, 
-                {
-                    first_name: response.firstName,
-                    last_name: response.lastName,
-                    role_id: response.role,
-                    manager_id: response.manager,
-                }, 
-                (err, res) => {
-                    if (err) throw err;
-                    console.log(`\n ${response.firstName} ${response.lastName} has been added \n`);
-                    appStart();
-                })
+                db.query(`INSERT INTO employee SET ?`, {
+                        first_name: response.firstName,
+                        last_name: response.lastName,
+                        role_id: response.role,
+                        manager_id: response.manager,
+                    },
+                    (err, res) => {
+                        if (err) throw err;
+                        console.log(`\n ${response.firstName} ${response.lastName} has been added \n`);
+                        appStart();
+                    })
             })
         })
+    })
+}
+
+function updateEmployeeRole() {
+    db.query(`SELECT * FROM role;`, (err, result) => {
+        if (err) throw err;
+        let roles = result.map(role => ({
+            name: role.title,
+            value: role.id
+        }));
+        db.query(`SELECT * FROM employee;`, (err, result) => {
+            if (err) throw err;
+            let employees = result.map(employee => ({
+                name: employee.first_name + ' ' + employee.last_name,
+                value: employee.id
+            }));
+            inquirer.prompt([{
+                    name: 'employee',
+                    type: 'rawlist',
+                    message: 'Whose employee record do you want to update?',
+                    choices: employees
+                },
+                {
+                    name: 'newRole',
+                    type: 'rawlist',
+                    message: 'What\'s the employee\'s new role?',
+                    choices: roles
+                },
+            ]).then((response) => {
+                db.query(`UPDATE employee SET ? WHERE ?`,
+                    [{
+                            role_id: response.newRole,
+                        },
+                        {
+                            id: response.employee,
+                        },
+                    ],
+                    (err, res) => {
+                        if (err) throw err;
+                        console.log(`\n Employee\'s role successfully updated! \n`);
+                        appStart();
+                    })
+            })
+
+        })
+
     })
 }
