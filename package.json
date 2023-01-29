@@ -19,6 +19,8 @@
   },
   "homepage": "https://github.com/Buky-js/Employee-Tracker#readme",
   "dependencies": {
-    "inquirer": "^8.2.4"
+    "figlet": "^1.5.2",
+    "inquirer": "^8.2.4",
+    "mysql2": "^3.0.1"
   }
 }

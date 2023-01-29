@@ -26,7 +26,7 @@ CREATE TABLE role (
 
 -- EMPLOYEE table
 CREATE TABLE employee (
-    id int NOT NULL,
+    id int PRIMARY KEY AUTO_INCREMENT,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30) NOT NULL,
     role_id INT NOT NULL,
