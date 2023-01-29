@@ -20,8 +20,8 @@ db.connect((err) => {
     // generate the 'Employee tracker' title
     figlet('Employee Tracker', function (err, data) {
         if (err) {
-            console.log('Something went wrong...');
-            console.dir(err);
+            console.log('Something is wrong');
+            
             return;
         }
         console.log(data);
