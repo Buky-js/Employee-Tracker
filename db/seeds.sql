@@ -1,3 +1,4 @@
+-- sample data for the employees_db
 
 INSERT INTO department (name)
 VALUES ('Care'), 

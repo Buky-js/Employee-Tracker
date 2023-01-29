@@ -1,8 +1,9 @@
-//const express = 'express';
+// npm modules installed
 const inquirer = require('inquirer');
 const mysql = require('mysql2');
 const figlet = require('figlet');
 
+// database connection details
 const db = mysql.createConnection({
         host: 'localhost',
         user: 'root',
@@ -29,6 +30,7 @@ db.connect((err) => {
 
 });
 
+// function to start the application
 function appStart() {
     inquirer.prompt([{
         type: 'list',
@@ -77,6 +79,7 @@ function appStart() {
     })
 }
 
+// function to view all departments
 function viewDepartments() {
     db.query(`SELECT * from department`, (err, res) => {
         if (err) throw err;
@@ -85,6 +88,7 @@ function viewDepartments() {
     })
 }
 
+// function to view all roles
 function viewRoles() {
     db.query(`SELECT * from role`, (err, res) => {
         if (err) throw err;
@@ -93,6 +97,7 @@ function viewRoles() {
     })
 }
 
+// function to view all employees
 function viewEmployees() {
     db.query(`SELECT * from employee`, (err, res) => {
         if (err) throw err;
@@ -101,6 +106,7 @@ function viewEmployees() {
     })
 }
 
+// function to add a new department
 function addDepartment() {
     inquirer.prompt([{
         type: 'input',
@@ -126,6 +132,7 @@ function addDepartment() {
     )
 }
 
+// function to add a new role
 function addRole() {
     db.query(`SELECT * FROM department`, (err, result) => {
         if (err) throw err;
@@ -183,6 +190,7 @@ function addRole() {
     })
 }
 
+// function to add a new employee
 function addEmployee() {
     db.query(`SELECT * FROM role`, (err, result) => {
         if (err) throw err;
@@ -235,6 +243,7 @@ function addEmployee() {
     })
 }
 
+// function to update an employee's role
 function updateEmployeeRole() {
     db.query(`SELECT * FROM role;`, (err, result) => {
         if (err) throw err;
